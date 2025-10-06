@@ -29,6 +29,10 @@
 
         .canvas {
             background-color: rgba(90, 20, 20, 0.1);
+            background-image: 
+            linear-gradient(to right, rgba(90,20,20,0.1) 2px, transparent 1px),
+            linear-gradient(to bottom, rgba(90,20,20,0.1) 2px, transparent 1px);
+            background-size: 50px 50px;
             width: 400px;
             height: 100%;
             border-right: 5px solid rgba(90, 20, 20, 0.7);
@@ -47,6 +51,11 @@
             margin: 20px 0;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
+            text-align: center;
+            align-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 42px;
         }
 
         .pontos {
@@ -55,6 +64,11 @@
             margin: 20px 0;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
+            text-align: center;
+            align-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 42px;
         }
 
         .velocidade {
@@ -63,6 +77,11 @@
             margin: 20px 0;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
+            text-align: center;
+            align-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 42px;
         }
     </style>
 </head>
@@ -72,9 +91,9 @@
         <canvas class="canvas" id="game"></canvas>
 
         <div class="container-pontos">
-            <div class="proxima-peca"></div>
-            <div class="pontos"></div>
-            <div class="velocidade"></div>
+            <div class="proxima-peca">000</div>
+            <div class="pontos">000</div>
+            <div class="velocidade">000</div>
         </div>
     </div>
 </body>
