@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
         body {
             box-sizing: border-box;
             margin: 0;
-            padding: 0;      
+            padding: 0;
             display: flex;
             height: 100vh;
             justify-content: center;
@@ -23,23 +24,59 @@
             box-shadow: 0 0 10px black;
             border-radius: 3px;
             border: 5px solid rgba(90, 20, 20, 0.7);
+            display: flex
         }
 
         .canvas {
             background-color: rgba(90, 20, 20, 0.1);
-            padding: 0 5px;
             width: 400px;
-            height:  100%;
+            height: 100%;
             border-right: 5px solid rgba(90, 20, 20, 0.7);
+        }
+
+        .container-pontos {
+            width: 100%;
+            height: 100%;
+            display: block;
+            align-content: space-around;
+        }
+
+        .proxima-peca {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
+            background-color: rgba(189, 168, 168, 0.1);
+        }
+
+        .pontos {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
+            background-color: rgba(189, 168, 168, 0.1);
+        }
+
+        .velocidade {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
+            background-color: rgba(189, 168, 168, 0.1);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <canvas class="canvas" id="game"></canvas>
-    
-        <div class="pontos"></div>
-        <div class="velocidade"></div>
+
+        <div class="container-pontos">
+            <div class="proxima-peca"></div>
+            <div class="pontos"></div>
+            <div class="velocidade"></div>
+        </div>
     </div>
 </body>
+
 </html>
