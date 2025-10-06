@@ -48,7 +48,7 @@
         .proxima-peca {
             width: 100%;
             height: 200px;
-            margin: 20px 0;
+            margin-bottom: 5px;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
             text-align: center;
@@ -61,7 +61,7 @@
         .pontos {
             width: 100%;
             height: 200px;
-            margin: 20px 0;
+            margin-bottom: 5px;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
             text-align: center;
@@ -71,31 +71,65 @@
             font-size: 42px;
         }
 
-        .velocidade {
+        .controle {
             width: 100%;
             height: 200px;
-            margin: 20px 0;
+            margin-bottom: 5px;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
-            text-align: center;
+            display: flex;
+            flex-direction: column;
             align-content: center;
-            font-family: Arial, Helvetica, sans-serif;
+            justify-content: center;
+        }
+
+        input {
+            width: 50px;
+            height: 50px;
+            margin: 5px auto;
+            text-align: center;
             font-weight: bold;
-            font-size: 42px;
+            font-size: 36x;
+            border: 2px solid rgba(0, 0, 0, 0.4);
+            border-radius: 3px;
+            box-shadow: 3px 3px 4px black;
+            background-color: rgba(236, 232, 232, 0.5);
+        }
+
+        label {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-left: 5px;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <canvas class="canvas" id="game"></canvas>
 
         <div class="container-pontos">
-            <div class="proxima-peca">000</div>
-            <div class="pontos">000</div>
-            <div class="velocidade">000</div>
+            <label for="prox">prox.</label>
+            <div id="prox" class="proxima-peca">000</div>
+
+            <label for="pontos">pontos</label>
+            <div id="pontos" class="pontos">000</div>
+            
+            <label for="controle">controle</label>
+            <div class="controle" id="controle">
+                <input class="input-continuar" type="button" value="&#9654">
+                <input class="input-pausar" type="button" value="&#9208">
+                <input class="input-recomecar" type="button" value="&#9209">
+            </div>
         </div>
     </div>
-</body>
 
+    <script>
+
+
+
+    </script>
+</body>
 </html>
