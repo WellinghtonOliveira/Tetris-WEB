@@ -141,7 +141,8 @@
 
     <script>
 
-        const game = document.querySelector("#game")
+        const canvas = document.querySelector("#game")
+        const ctx = canvas.getContext("2d")
 
         const btnContinuar = document.querySelector(".input-continuar")
         const btnPausar = document.querySelector(".input-pausar")
@@ -152,17 +153,57 @@
 
         btnContinuar.addEventListener("click", () => main())
 
-        const pecas = [
-            ["x","x","x","x"]
-        ]
+        const posicao = { x: 4, y: 0 }
+        const pecas = {
+            I:
+                [
+                    [1, 1, 1, 1]
+                ]
+            
+        }
+
+        const cols = 8
+        const rows = 14
+        const tamanhoBloco = 50
+        const board = Array.from({ length: rows }, () => Array(cols).fill(0))
 
         const main = () => {
-            
 
+            console.log(pecas)
+            console.log(posicao)
+            desenhaTabuleiro()
+            desenhaPecas(pecas, posicao)
 
         }
 
-        
+        function desenhaTabuleiro() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    if (board[y][x]) {
+                        desenhaCelula(x, y, "gray")
+                    }
+                }
+            }
+        }
+
+        function desenhaCelula(x, y, color) {
+            ctx.fillStyle = color
+            ctx.fillRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco)
+            ctx.strokeStyle = "#111"
+            ctx.strokeRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco)
+        }
+
+        function desenhaPecas(peca, pos, color = "cyan") {
+            for (let y = 0; y < peca.lenght; y++) {
+                for (let x = 0; x < peca[y].lenght; x++) {
+                    if (peca[y][x]) {
+                        desenhaCelula(pos.x + x, pos.y + y, color)
+                    }
+                }
+            }
+        }
 
     </script>
 </body>
