@@ -29,9 +29,9 @@
 
         .canvas {
             background-color: rgba(90, 20, 20, 0.1);
-            background-image: 
-            linear-gradient(to right, rgba(90,20,20,0.1) 2px, transparent 1px),
-            linear-gradient(to bottom, rgba(90,20,20,0.1) 2px, transparent 1px);
+            background-image:
+                linear-gradient(to right, rgba(90, 20, 20, 0.1) 2px, transparent 1px),
+                linear-gradient(to bottom, rgba(90, 20, 20, 0.1) 2px, transparent 1px);
             background-size: 50px 50px;
             width: 400px;
             height: 100%;
@@ -118,6 +118,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <canvas class="canvas" id="game"></canvas>
@@ -128,7 +129,7 @@
 
             <label for="pontos">pontos</label>
             <div id="pontos" class="pontos">000</div>
-            
+
             <label for="controle">controle</label>
             <div class="controle" id="controle">
                 <input class="input-continuar" type="button" value="&#9654">
@@ -140,8 +141,22 @@
 
     <script>
 
+        const game = document.querySelector("#game")
 
+        const btnContinuar = document.querySelector(".input-continuar")
+        const btnPausar = document.querySelector(".input-pausar")
+        const btnRecomecar = document.querySelector(".input-recomecar")
+
+        const proxPeca = document.querySelector("#prox")
+        const pontos = document.querySelector("#pontos")
+
+        const main = () => {
+            
+        }
+
+        
 
     </script>
 </body>
+
 </html>
