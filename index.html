@@ -138,148 +138,210 @@
     </div>
 
     <script>
-        const canvas = document.querySelector("#game")
-        const ctx = canvas.getContext("2d")
-        canvas.width = 400
-        canvas.height = 700
+        const canvas = document.querySelector("#game");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 400;
+        canvas.height = 700;
 
-        const btnContinuar = document.querySelector(".input-continuar")
-        const btnPausar = document.querySelector(".input-pausar")
-        const btnRecomecar = document.querySelector(".input-recomecar")
+        const btnContinuar = document.querySelector(".input-continuar");
+        const btnPausar = document.querySelector(".input-pausar");
+        const btnRecomecar = document.querySelector(".input-recomecar");
 
-        btnContinuar.addEventListener("click", () => main())
+        const proxPecaDiv = document.querySelector("#prox");
+        const pontosDiv = document.querySelector("#pontos");
 
-        const cols = 8
-        const rows = 14
-        const tamanhoBloco = 50
-        const board = Array.from({ length: rows }, () => Array(cols).fill(0))
+        btnContinuar.addEventListener("click", () => main());
+        btnPausar.addEventListener("click", () => pausa());
+        btnRecomecar.addEventListener("click", () => reinicia());
+
+        const cols = 8;
+        const rows = 14;
+        const tamanhoBloco = 50;
+        const board = Array.from({ length: rows }, () => Array(cols).fill(0));
 
         const pecas = {
-            I: [
-                [1, 1, 1, 1]
-            ],
-            O: [
-                [1, 1],
-                [1, 1]
-            ]
+            I: [[1, 1, 1, 1]],
+            O: [[1, 1], [1, 1]],
+            T: [[0, 1, 0], [1, 1, 1]],
+            L: [[1, 0], [1, 0], [1, 1]],
+            J: [[0, 1], [0, 1], [1, 1]],
+            S: [[0, 1, 1], [1, 1, 0]],
+            Z: [[1, 1, 0], [0, 1, 1]]
+        };
+
+        let posicao = { x: 3, y: 0 };
+        let pecaAtual = geraPecaAleatoria();
+        let proximaPeca = geraPecaAleatoria();
+        let intervaloJogo;
+        let pontos = 0;
+        let velocidade = 800;
+        let pausado = false;
+
+        // ---------------- Funções principais ----------------
+        function main() {
+            clearInterval(intervaloJogo);
+            intervaloJogo = setInterval(atualiza, velocidade);
+            desenha();
         }
 
-        let posicao = { x: 3, y: 0 }
-        let pecaAtual = pecas.O
+        function pausa() {
+            pausado = !pausado;
+            if (pausado) clearInterval(intervaloJogo);
+            else main();
+        }
 
-        let intervaloJogo
-
-        function main() {
-            clearInterval(intervaloJogo)
-            intervaloJogo = setInterval(atualiza, 800)
-            desenha()
+        function reinicia() {
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    board[y][x] = 0;
+                }
+            }
+            pontos = 0;
+            velocidade = 800;
+            posicao = { x: 3, y: 0 };
+            pecaAtual = geraPecaAleatoria();
+            proximaPeca = geraPecaAleatoria();
+            main();
         }
 
         function atualiza() {
-            moverPecaBaixo()
-            desenha()
+            moverPecaBaixo();
+            desenha();
         }
 
+        // ---------------- Desenho ----------------
         function desenha() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            desenhaTabuleiro()
-            desenhaPeca(pecaAtual, posicao)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            desenhaTabuleiro();
+            desenhaPeca(pecaAtual, posicao);
+            proxPecaDiv.innerHTML = desenhaProxima(proximaPeca);
+            pontosDiv.innerText = pontos.toString().padStart(3, '0');
         }
 
         function desenhaTabuleiro() {
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
-                    if (board[y][x]) {
-                        desenhaCelula(x, y, "gray")
-                    }
+                    if (board[y][x]) desenhaCelula(x, y, "gray");
                 }
             }
         }
 
         function desenhaCelula(x, y, color) {
-            ctx.fillStyle = color
-            ctx.fillRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco)
-            ctx.strokeStyle = "#111"
-            ctx.strokeRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco)
+            ctx.fillStyle = color;
+            ctx.fillRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco);
+            ctx.strokeStyle = "#111";
+            ctx.strokeRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco);
         }
 
         function desenhaPeca(peca, pos, color = "cyan") {
             for (let y = 0; y < peca.length; y++) {
                 for (let x = 0; x < peca[y].length; x++) {
                     if (peca[y][x]) {
-                        desenhaCelula(pos.x + x, pos.y + y, color)
+                        desenhaCelula(pos.x + x, pos.y + y, color);
                     }
                 }
             }
         }
 
+        function desenhaProxima(peca) {
+            let str = "";
+            for (let y = 0; y < peca.length; y++) {
+                for (let x = 0; x < peca[y].length; x++) {
+                    str += peca[y][x] ? "■" : " ";
+                }
+                str += "<br>";
+            }
+            return str;
+        }
+
+        // ---------------- Movimento ----------------
         function moverPecaBaixo() {
-            if (!colidiu(pecaAtual, { x: posicao.x, y: posicao.y + 1 })) {
-                posicao.y++
-            } else {
-                fixarPeca()
-                novaPeca()
+            if (!colidiu(pecaAtual, { x: posicao.x, y: posicao.y + 1 })) posicao.y++;
+            else {
+                fixarPeca();
+                removerLinhas();
+                pecaAtual = proximaPeca;
+                proximaPeca = geraPecaAleatoria();
+                posicao = { x: 3, y: 0 };
+                if (colidiu(pecaAtual, posicao)) {
+                    alert("Fim de jogo! Pontos: " + pontos);
+                    reinicia();
+                }
             }
         }
 
         function moverPecaEsquerda() {
-            if (!colidiu(pecaAtual, { x: posicao.x - 1, y: posicao.y })) {
-                posicao.x--
-            }
+            if (!colidiu(pecaAtual, { x: posicao.x - 1, y: posicao.y })) posicao.x--;
         }
 
         function moverPecaDireita() {
-            if (!colidiu(pecaAtual, { x: posicao.x + 1, y: posicao.y })) {
-                posicao.x++
-            }
+            if (!colidiu(pecaAtual, { x: posicao.x + 1, y: posicao.y })) posicao.x++;
         }
 
+        function rotacionarPeca() {
+            let nova = pecaAtual[0].map((_, i) => pecaAtual.map(row => row[i])).reverse();
+            if (!colidiu(nova, posicao)) pecaAtual = nova;
+        }
+
+        // ---------------- Colisão e fixação ----------------
         function colidiu(peca, pos) {
             for (let y = 0; y < peca.length; y++) {
                 for (let x = 0; x < peca[y].length; x++) {
                     if (peca[y][x]) {
-                        const novoY = pos.y + y
-                        const novoX = pos.x + x
-                        if (
-                            novoY >= rows || // chão
-                            novoX < 0 || novoX >= cols || // fora da tela
-                            board[novoY]?.[novoX] // colisão com outra peça
-                        ) {
-                            return true
-                        }
+                        const novoX = pos.x + x;
+                        const novoY = pos.y + y;
+                        if (novoX < 0 || novoX >= cols || novoY >= rows || board[novoY]?.[novoX]) return true;
                     }
                 }
             }
-            return false
+            return false;
         }
 
         function fixarPeca() {
             for (let y = 0; y < pecaAtual.length; y++) {
                 for (let x = 0; x < pecaAtual[y].length; x++) {
-                    if (pecaAtual[y][x]) {
-                        board[posicao.y + y][posicao.x + x] = 1
-                    }
+                    if (pecaAtual[y][x]) board[posicao.y + y][posicao.x + x] = 1;
                 }
             }
         }
 
-        function novaPeca() {
-            posicao = { x: 3, y: 0 }
-            pecaAtual = pecas.O
+        // ---------------- Remover linhas completas ----------------
+        function removerLinhas() {
+            let linhasRemovidas = 0;
+            for (let y = rows - 1; y >= 0; y--) {
+                if (board[y].every(val => val !== 0)) {
+                    board.splice(y, 1);
+                    board.unshift(Array(cols).fill(0));
+                    linhasRemovidas++;
+                    y++; // revisa a mesma linha
+                }
+            }
+            if (linhasRemovidas > 0) {
+                pontos += linhasRemovidas * 10;
+                // aumentar velocidade a cada 50 pontos
+                if (pontos % 50 === 0 && velocidade > 200) {
+                    velocidade -= 50;
+                    clearInterval(intervaloJogo);
+                    intervaloJogo = setInterval(atualiza, velocidade);
+                }
+            }
         }
 
-        // 🎮 Controle das setas
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowLeft") moverPecaEsquerda()
-            if (event.key === "ArrowRight") moverPecaDireita()
-            if (event.key === "ArrowDown") moverPecaBaixo()
-            desenha() // redesenha após o movimento
-        })
+        // ---------------- Gerar peça aleatória ----------------
+        function geraPecaAleatoria() {
+            const keys = Object.keys(pecas);
+            return pecas[keys[Math.floor(Math.random() * keys.length)]];
+        }
 
-        // Inicia o jogo
-        main()
+        // ---------------- Controle do teclado ----------------
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") moverPecaEsquerda();
+            if (e.key === "ArrowRight") moverPecaDireita();
+            if (e.key === "ArrowDown") moverPecaBaixo();
+            if (e.key === "ArrowUp") rotacionarPeca();
+            desenha();
+        });
     </script>
-
 
 </body>
 
