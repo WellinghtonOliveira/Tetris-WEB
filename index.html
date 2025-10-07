@@ -33,8 +33,6 @@
                 linear-gradient(to right, rgba(90, 20, 20, 0.1) 2px, transparent 1px),
                 linear-gradient(to bottom, rgba(90, 20, 20, 0.1) 2px, transparent 1px);
             background-size: 50px 50px;
-            width: 400px;
-            height: 100%;
             border-right: 5px solid rgba(90, 20, 20, 0.7);
         }
 
@@ -143,6 +141,8 @@
 
         const canvas = document.querySelector("#game")
         const ctx = canvas.getContext("2d")
+        canvas.width = 400
+        canvas.height = 700
 
         const btnContinuar = document.querySelector(".input-continuar")
         const btnPausar = document.querySelector(".input-pausar")
@@ -153,13 +153,17 @@
 
         btnContinuar.addEventListener("click", () => main())
 
-        const posicao = { x: 4, y: 0 }
+        const posicao = { x: 3, y: 0 }
         const pecas = {
             I:
                 [
                     [1, 1, 1, 1]
+                ],
+            O:
+                [
+                    [1, 1],
+                    [1, 1]
                 ]
-            
         }
 
         const cols = 8
@@ -167,18 +171,25 @@
         const tamanhoBloco = 50
         const board = Array.from({ length: rows }, () => Array(cols).fill(0))
 
+        let intervaloJogo
+
         const main = () => {
+            clearInterval(intervaloJogo)
+            intervaloJogo = setInterval(atualiza, 800)
+        }
 
-            console.log(pecas)
-            console.log(posicao)
+        function atualiza() {
+            moverPecaBaixo()
+            desenha()
+        }
+
+        function desenha() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
             desenhaTabuleiro()
-            desenhaPecas(pecas, posicao)
-
+            desenhaPecas(pecas.O, posicao)
         }
 
         function desenhaTabuleiro() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     if (board[y][x]) {
@@ -196,9 +207,8 @@
         }
 
         function desenhaPecas(peca, pos, color = "cyan") {
-            
-            for (let y = 0; y < peca.lenght; y++) {
-                for (let x = 0; x < peca[y].lenght; x++) {
+            for (let y = 0; y < peca.length; y++) {
+                for (let x = 0; x < peca[y].length; x++) {
                     if (peca[y][x]) {
                         desenhaCelula(pos.x + x, pos.y + y, color)
                     }
@@ -206,6 +216,47 @@
             }
         }
 
+        function moverPecaBaixo() {
+            if (!colidiu(pecas, {x: posicao.x, y: posicao.y + 1})) {
+                posicao.y++
+            }else {
+                fixarPeca()
+                novaPeca()
+            }
+        }
+
+        function colidiu(pecas, pos) {
+            for (let y = 0; y < pecas.length; y++) {
+                for (let x = 0; x < pecas[y].length; x++) {
+                    if (pecas[y][x]) {
+                        const novoY = pos.y + y
+                        const novoX = pos.x + x
+                        if (
+                            novoY >= rows ||
+                            novoX < 0 || novoX >= cols ||
+                            board[novoY]?.[novoX]
+                        ) {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
+
+        function fixarPeca() {
+            for (let y = 0; y < pecas.length; y++) {
+                for (let x = 0; x < pecas[y].length; x++) {
+                    if (pecas[y][x]) {
+                        board[posicao.y + y][posicao.x + x] = 1
+                    }
+                } 
+            }
+        }
+
+        function novaPeca() {
+            posicao = { x: 2, y: 0 }
+        }
     </script>
 </body>
 
