@@ -5,55 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris</title>
-
     <style>
         body {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
             display: flex;
-            height: 100vh;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        .container {
-            background-color: rgba(0, 0, 0, 0.1);
-            width: 600px;
-            height: 700px;
-            box-shadow: 0 0 10px black;
-            border-radius: 3px;
-            border: 5px solid rgba(90, 20, 20, 0.7);
-            display: flex
-        }
-
-        .canvas {
-            background-color: rgba(90, 20, 20, 0.1);
-            background-image:
-                linear-gradient(to right, rgba(90, 20, 20, 0.1) 2px, transparent 1px),
-                linear-gradient(to bottom, rgba(90, 20, 20, 0.1) 2px, transparent 1px);
-            background-size: 50px 50px;
-            border-right: 5px solid rgba(90, 20, 20, 0.7);
-        }
-
-        .container-pontos {
-            width: 100%;
-            height: 100%;
-            display: block;
-            align-content: space-around;
-        }
-
-        .proxima-peca {
+        .prox-peca {
             width: 100%;
             height: 200px;
             margin-bottom: 5px;
             box-shadow: 0 2px 5px rgba(90, 20, 20, 0.7);
             background-color: rgba(189, 168, 168, 0.1);
-            text-align: center;
+            display: flex;
+            justify-content: center;
             align-content: center;
+        }
+
+        input:hover {
+            cursor: pointer;
+            background-color: rgba(236, 232, 232, 1);
+            transform: scaleX(1.009);
+        }
+
+        input:focus {
+            background-color: rgb(136, 134, 134, 0.2);
+            transform: scale(0.9);
+            box-shadow: 0 0 1px black;
+        }
+
+        label {
             font-family: Arial, Helvetica, sans-serif;
+            margin-top: 3px;
+            font-size: 16px;
             font-weight: bold;
-            font-size: 42px;
+            width: 100%;
+            margin-left: 5px;
+        }
+
+        .container {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 5px solid rgba(90, 20, 20, 0.7);
+            border-radius: 3px;
+            width: 600px;
+            height: 700px;
+            box-shadow: 0 0 10px black;
         }
 
         .pontos {
@@ -81,79 +82,124 @@
             justify-content: center;
         }
 
-        input {
+        canvas {
+            background-color: rgba(90, 20, 20, 0.1);
+            background-image:
+                linear-gradient(to right, rgba(90, 20, 20, 0.1) 2px, transparent 1px),
+                linear-gradient(to bottom, rgba(90, 20, 20, 0.1) 2px, transparent 1px);
+            background-size: 50px 50px;
+            border-right: 5px solid rgba(90, 20, 20, 0.7);
+        }
+
+        .container-pontos {
+            width: 100%;
+            height: 100%;
+            display: block;
+            align-content: space-around;
+            padding: 10px;
+        }
+
+        #prox {
+            display: grid;
+            grid-template-columns: repeat(4, 30px);
+            grid-auto-rows: 30px;
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+
+        #prox .block {
+            width: 30px;
+            height: 30px;
+            margin: 0;
+        }
+
+        .block-I {
+            background-color: cyan;
+        }
+
+        .block-O {
+            background-color: yellow;
+        }
+
+        .block-T {
+            background-color: purple;
+        }
+
+        .block-L {
+            background-color: orange;
+        }
+
+        .block-J {
+            background-color: blue;
+        }
+
+        .block-S {
+            background-color: green;
+        }
+
+        .block-Z {
+            background-color: red;
+        }
+
+        .block-empty {
+            background-color: transparent;
+        }
+
+        #pontos {
+            font-size: 42px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .controle input {
             width: 50px;
             height: 50px;
             margin: 5px auto;
-            text-align: center;
             font-weight: bold;
             font-size: 22px;
             border: 2px solid rgba(0, 0, 0, 0.4);
             border-radius: 3px;
             box-shadow: 3px 3px 4px black;
             background-color: rgba(236, 232, 232, 0.5);
-        }
-
-        input:hover {
             cursor: pointer;
-            background-color: rgba(236, 232, 232, 1);
-            transform: scaleX(1.009);
-        }
-
-        input:focus {
-            background-color: rgb(136, 134, 134, 0.2);
-            transform: scale(0.9);
-            box-shadow: 0 0 1px black;
-        }
-
-        label {
-            font-family: Arial, Helvetica, sans-serif;
-            margin-top: 3px;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            margin-left: 5px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <canvas class="canvas" id="game"></canvas>
-
+        <canvas id="game" width="400" height="700"></canvas>
         <div class="container-pontos">
-            <label for="prox">prox.</label>
-            <div id="prox" class="proxima-peca">000</div>
+            <label for="prox">Próx. peça</label>
+            <div id="prox" class="prox-peca"></div>
 
-            <label for="pontos">pontos</label>
-            <div id="pontos" class="pontos">000</div>
+            <label for="pontos">Pontos</label>
+            <div id="pontos">000</div>
 
-            <label for="controle">controle</label>
-            <div class="controle" id="controle">
-                <input class="input-continuar" type="button" value="&#9654">
-                <input class="input-pausar" type="button" value="&#9208">
-                <input class="input-recomecar" type="button" value="&#9209">
+            <label for="controle">Controle</label>
+            <div class="controle">
+                <input class="input-continuar" type="button" value="▶">
+                <input class="input-pausar" type="button" value="⏸">
+                <input class="input-recomecar" type="button" value="⏹">
             </div>
         </div>
     </div>
 
     <script>
+        // Canvas
         const canvas = document.querySelector("#game");
         const ctx = canvas.getContext("2d");
-        canvas.width = 400;
-        canvas.height = 700;
 
+        // Botões
         const btnContinuar = document.querySelector(".input-continuar");
         const btnPausar = document.querySelector(".input-pausar");
         const btnRecomecar = document.querySelector(".input-recomecar");
 
+        // Próxima peça e pontos
         const proxPecaDiv = document.querySelector("#prox");
         const pontosDiv = document.querySelector("#pontos");
 
-        btnContinuar.addEventListener("click", () => main());
-        btnPausar.addEventListener("click", () => pausa());
-        btnRecomecar.addEventListener("click", () => reinicia());
-
+        // Config
         const cols = 8;
         const rows = 14;
         const tamanhoBloco = 50;
@@ -172,10 +218,17 @@
         let posicao = { x: 3, y: 0 };
         let pecaAtual = geraPecaAleatoria();
         let proximaPeca = geraPecaAleatoria();
+        let tipoAtual = pegaTipoPeca(pecaAtual);
+        let tipoProxima = pegaTipoPeca(proximaPeca);
         let intervaloJogo;
         let pontos = 0;
         let velocidade = 800;
         let pausado = false;
+
+        // ---------------- Controle dos botões ----------------
+        btnContinuar.addEventListener("click", () => { pausado = false; main(); });
+        btnPausar.addEventListener("click", () => pausa());
+        btnRecomecar.addEventListener("click", () => reinicia());
 
         // ---------------- Funções principais ----------------
         function main() {
@@ -191,16 +244,16 @@
         }
 
         function reinicia() {
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
+            for (let y = 0; y < rows; y++)
+                for (let x = 0; x < cols; x++)
                     board[y][x] = 0;
-                }
-            }
             pontos = 0;
             velocidade = 800;
             posicao = { x: 3, y: 0 };
             pecaAtual = geraPecaAleatoria();
             proximaPeca = geraPecaAleatoria();
+            tipoAtual = pegaTipoPeca(pecaAtual);
+            tipoProxima = pegaTipoPeca(proximaPeca);
             main();
         }
 
@@ -213,8 +266,8 @@
         function desenha() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             desenhaTabuleiro();
-            desenhaPeca(pecaAtual, posicao);
-            proxPecaDiv.innerHTML = desenhaProxima(proximaPeca);
+            desenhaPeca(pecaAtual, posicao, tipoAtual);
+            desenhaProxima(proximaPeca, tipoProxima);
             pontosDiv.innerText = pontos.toString().padStart(3, '0');
         }
 
@@ -233,25 +286,26 @@
             ctx.strokeRect(x * tamanhoBloco, y * tamanhoBloco, tamanhoBloco, tamanhoBloco);
         }
 
-        function desenhaPeca(peca, pos, color = "cyan") {
+        function desenhaPeca(peca, pos, tipo) {
+            let cores = { I: "cyan", O: "yellow", T: "purple", L: "orange", J: "blue", S: "green", Z: "red" };
             for (let y = 0; y < peca.length; y++) {
                 for (let x = 0; x < peca[y].length; x++) {
-                    if (peca[y][x]) {
-                        desenhaCelula(pos.x + x, pos.y + y, color);
-                    }
+                    if (peca[y][x]) desenhaCelula(pos.x + x, pos.y + y, cores[tipo]);
                 }
             }
         }
 
-        function desenhaProxima(peca) {
-            let str = "";
-            for (let y = 0; y < peca.length; y++) {
-                for (let x = 0; x < peca[y].length; x++) {
-                    str += peca[y][x] ? "■" : " ";
+        function desenhaProxima(peca, tipo) {
+            proxPecaDiv.innerHTML = "";
+            for (let y = 0; y < 4; y++) {
+                for (let x = 0; x < 4; x++) {
+                    const block = document.createElement("div");
+                    block.className = "block";
+                    if (peca[y] && peca[y][x]) block.classList.add("block-" + tipo);
+                    else block.classList.add("block-empty");
+                    proxPecaDiv.appendChild(block);
                 }
-                str += "<br>";
             }
-            return str;
         }
 
         // ---------------- Movimento ----------------
@@ -261,7 +315,9 @@
                 fixarPeca();
                 removerLinhas();
                 pecaAtual = proximaPeca;
+                tipoAtual = tipoProxima;
                 proximaPeca = geraPecaAleatoria();
+                tipoProxima = pegaTipoPeca(proximaPeca);
                 posicao = { x: 3, y: 0 };
                 if (colidiu(pecaAtual, posicao)) {
                     alert("Fim de jogo! Pontos: " + pontos);
@@ -270,14 +326,8 @@
             }
         }
 
-        function moverPecaEsquerda() {
-            if (!colidiu(pecaAtual, { x: posicao.x - 1, y: posicao.y })) posicao.x--;
-        }
-
-        function moverPecaDireita() {
-            if (!colidiu(pecaAtual, { x: posicao.x + 1, y: posicao.y })) posicao.x++;
-        }
-
+        function moverPecaEsquerda() { if (!colidiu(pecaAtual, { x: posicao.x - 1, y: posicao.y })) posicao.x--; }
+        function moverPecaDireita() { if (!colidiu(pecaAtual, { x: posicao.x + 1, y: posicao.y })) posicao.x++; }
         function rotacionarPeca() {
             let nova = pecaAtual[0].map((_, i) => pecaAtual.map(row => row[i])).reverse();
             if (!colidiu(nova, posicao)) pecaAtual = nova;
@@ -309,16 +359,15 @@
         function removerLinhas() {
             let linhasRemovidas = 0;
             for (let y = rows - 1; y >= 0; y--) {
-                if (board[y].every(val => val !== 0)) {
+                if (board[y].every(v => v !== 0)) {
                     board.splice(y, 1);
                     board.unshift(Array(cols).fill(0));
                     linhasRemovidas++;
-                    y++; // revisa a mesma linha
+                    y++;
                 }
             }
             if (linhasRemovidas > 0) {
                 pontos += linhasRemovidas * 10;
-                // aumentar velocidade a cada 50 pontos
                 if (pontos % 50 === 0 && velocidade > 200) {
                     velocidade -= 50;
                     clearInterval(intervaloJogo);
@@ -327,10 +376,15 @@
             }
         }
 
-        // ---------------- Gerar peça aleatória ----------------
+        // ---------------- Peça aleatória ----------------
         function geraPecaAleatoria() {
             const keys = Object.keys(pecas);
             return pecas[keys[Math.floor(Math.random() * keys.length)]];
+        }
+
+        function pegaTipoPeca(peca) {
+            for (let key in pecas) if (pecas[key] === peca) return key;
+            return "I";
         }
 
         // ---------------- Controle do teclado ----------------
@@ -341,8 +395,10 @@
             if (e.key === "ArrowUp") rotacionarPeca();
             desenha();
         });
-    </script>
 
+        // Inicia o jogo
+        main();
+    </script>
 </body>
 
 </html>
