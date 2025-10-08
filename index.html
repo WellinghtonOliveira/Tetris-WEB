@@ -215,7 +215,7 @@
             Z: [[1, 1, 0], [0, 1, 1]]
         };
 
-        let posicao = { x: 3, y: 0 };
+        let posicao = { x: 3, y: -1 };
         let pecaAtual = geraPecaAleatoria();
         let proximaPeca = geraPecaAleatoria();
         let tipoAtual = pegaTipoPeca(pecaAtual);
@@ -249,12 +249,12 @@
                     board[y][x] = 0;
             pontos = 0;
             velocidade = 800;
-            posicao = { x: 3, y: 0 };
+            posicao = { x: 3, y: -1 };
             pecaAtual = geraPecaAleatoria();
             proximaPeca = geraPecaAleatoria();
             tipoAtual = pegaTipoPeca(pecaAtual);
             tipoProxima = pegaTipoPeca(proximaPeca);
-            main();
+            pausado = true
         }
 
         function atualiza() {
@@ -395,9 +395,6 @@
             if (e.key === "ArrowUp") rotacionarPeca();
             desenha();
         });
-
-        // Inicia o jogo
-        main();
     </script>
 </body>
 
