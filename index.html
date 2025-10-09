@@ -215,7 +215,7 @@
             Z: [[1, 1, 0], [0, 1, 1]]
         };
 
-        let posicao = { x: 3, y: -1 };
+        let posicao = { x: 3, y: 0 };
         let pecaAtual = geraPecaAleatoria();
         let proximaPeca = geraPecaAleatoria();
         let tipoAtual = pegaTipoPeca(pecaAtual);
@@ -233,7 +233,6 @@
         // ---------------- Funções principais ----------------
         function main() {
             pausado = false;
-            if (pausado) return
             clearInterval(intervaloJogo);
             intervaloJogo = setInterval(atualiza, velocidade);
             desenha();
@@ -245,7 +244,7 @@
             else main();
         }
 
-        function reinicia() {
+        function reinicia(x) {
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
                     board[y][x] = 0;
@@ -253,12 +252,13 @@
             }
             pontos = 0;
             velocidade = 800;
-            posicao = { x: 3, y: -1 };
+            posicao = { x: 3, y: 0 };
             pecaAtual = geraPecaAleatoria();
             proximaPeca = geraPecaAleatoria();
             tipoAtual = pegaTipoPeca(pecaAtual);
             tipoProxima = pegaTipoPeca(proximaPeca);
             pausado = true
+            if (pausado && x == "morte") clearInterval(intervaloJogo);
         }
 
         function atualiza() {
@@ -325,7 +325,7 @@
                 posicao = { x: 3, y: 0 };
                 if (colidiu(pecaAtual, posicao)) {
                     alert("Fim de jogo! Pontos: " + pontos);
-                    reinicia();
+                    reinicia('morte');
                 }
             }
         }
