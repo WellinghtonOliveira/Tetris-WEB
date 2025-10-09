@@ -178,9 +178,9 @@
 
             <label for="controle">Controle</label>
             <div class="controle">
-                <input class="input-continuar" type="button" value="▶">
-                <input class="input-pausar" type="button" value="⏸">
-                <input class="input-recomecar" type="button" value="⏹">
+                <input class="input-continuar" type="button" title="COMEÇAR" value="▶">
+                <input class="input-pausar" type="button" title="PAUSAR" value="⏸">
+                <input class="input-recomecar" type="button" title="LIMPAR" value="⏹">
             </div>
         </div>
     </div>
@@ -226,27 +226,31 @@
         let pausado = false;
 
         // ---------------- Controle dos botões ----------------
-        btnContinuar.addEventListener("click", () => { pausado = false; main(); });
+        btnContinuar.addEventListener("click", () => main());
         btnPausar.addEventListener("click", () => pausa());
         btnRecomecar.addEventListener("click", () => reinicia());
 
         // ---------------- Funções principais ----------------
         function main() {
+            pausado = false;
+            if (pausado) return
             clearInterval(intervaloJogo);
             intervaloJogo = setInterval(atualiza, velocidade);
             desenha();
         }
 
         function pausa() {
-            pausado = !pausado;
+            pausado = true;
             if (pausado) clearInterval(intervaloJogo);
             else main();
         }
 
         function reinicia() {
-            for (let y = 0; y < rows; y++)
-                for (let x = 0; x < cols; x++)
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
                     board[y][x] = 0;
+                }
+            }
             pontos = 0;
             velocidade = 800;
             posicao = { x: 3, y: -1 };
